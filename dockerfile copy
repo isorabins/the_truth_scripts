@@ -1,0 +1,23 @@
+# Use a single-stage build
+FROM python:3.9-slim
+
+# Set the working directory in the container
+WORKDIR /app
+
+# Copy the Python requirements file into the container
+COPY requirements.txt .
+
+# Install dependencies including Gunicorn
+RUN pip install --no-cache-dir -r requirements.txt gunicorn && which gunicorn
+
+# Copy the rest of your application’s source code into the container
+COPY . .
+
+# Make the start script executable
+RUN chmod +x start_gunicorn.sh 
+
+# Expose the port Gunicorn will listen on
+EXPOSE 3000
+
+# Command to run the application
+CMD ["./start_gunicorn.sh"]
